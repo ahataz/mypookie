@@ -12,39 +12,47 @@
 <title>Be My Valentine 
 \f1 \uc0\u55357 \u56469 
 \f0 </title>\
-\
-<!-- Confetti -->\
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>\
-\
 <style>\
-    body \{\
-        background: #ffe6f0;\
-        font-family: Arial, sans-serif;\
-        text-align: center;\
-        height: 100vh;\
+    /* Reset i podstawowy wygl\uc0\u261 d */\
+    * \{\
         margin: 0;\
+        padding: 0;\
+        box-sizing: border-box;\
+    \}\
+\
+    body \{\
+        font-family: 'Arial', sans-serif;\
         display: flex;\
         justify-content: center;\
         align-items: center;\
+        height: 100vh;\
+        transition: background 0.5s;\
+        background-color: #ffb6c1; /* jasnor\'f3\uc0\u380 owy */\
+        color: #fff;\
+        text-align: center;\
     \}\
 \
-    .card \{\
-        background: white;\
-        padding: 30px;\
-        border-radius: 25px;\
-        box-shadow: 0 15px 30px rgba(0,0,0,0.2);\
-        max-width: 420px;\
+    .container \{\
+        max-width: 500px;\
         width: 90%;\
+        padding: 30px;\
+        background: rgba(255, 255, 255, 0.2);\
+        border-radius: 25px;\
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);\
+        backdrop-filter: blur(5px);\
     \}\
 \
     h1 \{\
-        color: #ff4d88;\
-        margin-bottom: 30px;\
+        margin-bottom: 25px;\
+        font-size: 28px;\
+        color: #fff;\
     \}\
 \
     .buttons \{\
-        position: relative;\
-        height: 130px;\
+        display: flex;\
+        justify-content: center;\
+        gap: 20px;\
+        margin-bottom: 25px;\
     \}\
 \
     button \{\
@@ -53,6 +61,11 @@
         border: none;\
         border-radius: 12px;\
         cursor: pointer;\
+        transition: transform 0.2s;\
+    \}\
+\
+    button:hover \{\
+        transform: scale(1.05);\
     \}\
 \
     #yes \{\
@@ -62,34 +75,22 @@
 \
     #no \{\
         background-color: #ccc;\
-        position: absolute;\
-        left: 200px;\
-        top: 0;\
+        color: #333;\
     \}\
 \
-    .photos img \{\
+    .photo \{\
         width: 100%;\
         border-radius: 15px;\
-        margin-top: 15px;\
         display: none;\
-    \}\
-\
-    #message \{\
-        margin-top: 20px;\
-        font-size: 18px;\
-        color: #ff4d88;\
-        font-weight: bold;\
+        margin-top: 15px;\
     \}\
 </style>\
 </head>\
-\
 <body>\
-\
-<div class="card">\
-    <h1>Will you be my Valentine? 
-\f1 \uc0\u55357 \u56472 
+<div class="container">\
+    <h1 id="question">Will you be my Valentine? 
+\f1 \uc0\u55357 \u56469 
 \f0 </h1>\
-\
     <div class="buttons">\
         <button id="yes">Yes 
 \f1 \uc0\u55357 \u56470 
@@ -98,60 +99,57 @@
 \f1 \uc0\u55357 \u56900 
 \f0 </button>\
     </div>\
-\
-    <div id="message"></div>\
-\
-    <!-- PHOTOS -->\
-    <div class="photos">\
-        <img src="kot1.jpg">\
-        <img src="kot2.jpg">\
-        <img src="kot3.jpg">\
-        <img src="kot4.jpg">\
-        <img src="kot5.jpg">\
-    </div>\
+    <img id="photo1" class="photo" src="kot1.jpg" alt="Kot 1">\
+    <img id="photo2" class="photo" src="kot2.jpg" alt="Kot 2">\
+    <img id="photo3" class="photo" src="kot3.jpg" alt="Kot 3">\
+    <img id="photo4" class="photo" src="kot4.jpg" alt="Kot 4">\
+    <img id="photo5" class="photo" src="kot5.jpg" alt="Kot 5">\
 </div>\
 \
 <script>\
-    const noBtn = document.getElementById("no");\
-    const yesBtn = document.getElementById("yes");\
-    const message = document.getElementById("message");\
-    const photos = document.querySelectorAll(".photos img");\
+    const body = document.body;\
+    const question = document.getElementById('question');\
+    const yesBtn = document.getElementById('yes');\
+    const noBtn = document.getElementById('no');\
+    const photos = \{\
+        1: document.getElementById('photo1'),\
+        2: document.getElementById('photo2'),\
+        3: document.getElementById('photo3'),\
+        4: document.getElementById('photo4'),\
+        5: document.getElementById('photo5')\
+    \};\
 \
-    // NO runs away\
-    noBtn.addEventListener("mouseover", () => \{\
-        const x = Math.random() * 250;\
-        const y = Math.random() * 90;\
-        noBtn.style.left = x + "px";\
-        noBtn.style.top = y + "px";\
-    \});\
+    // Poka\uc0\u380  tylko wybrane zdj\u281 cia\
+    function showPhotos(list) \{\
+        Object.values(photos).forEach(p => p.style.display = 'none');\
+        list.forEach(i => photos[i].style.display = 'block');\
+    \}\
 \
-    // If NO is clicked\
-    noBtn.addEventListener("click", () => \{\
-        message.innerText = "No means YES in Polish 
-\f1 \uc0\u55357 \u56847 
-\f0  SIKE 
-\f1 \uc0\u55357 \u56469 
+    // Klikni\uc0\u281 cie Yes\
+    yesBtn.addEventListener('click', () => \{\
+        body.style.backgroundColor = '#9370db'; // fioletowy\
+        question.textContent = "YAY! I love you! 
+\f1 \uc0\u55357 \u56476 
 \f0 ";\
+        showPhotos([3,4]);\
+        yesBtn.style.display = 'none';\
+        noBtn.style.display = 'none';\
     \});\
 \
-    // YES clicked\
-    yesBtn.addEventListener("click", () => \{\
-        message.innerText = "YAAAY 
-\f1 \uc0\u55357 \u56470 
-\f0  I love you!!!";\
-\
-        photos.forEach(photo => \{\
-            photo.style.display = "block";\
-        \});\
-\
-        confetti(\{\
-            particleCount: 250,\
-            spread: 120,\
-            origin: \{ y: 0.6 \}\
-        \});\
+    // Klikni\uc0\u281 cie No\
+    noBtn.addEventListener('click', () => \{\
+        body.style.backgroundColor = '#9370db'; // fioletowy\
+        question.textContent = "Haha, maybe next time! 
+\f1 \uc0\u55357 \u56888 
+\f0 ";\
+        showPhotos([5]);\
+        yesBtn.style.display = 'none';\
+        noBtn.style.display = 'none';\
     \});\
+\
+    // Na starcie poka\uc0\u380  kot1 i kot2\
+    showPhotos([1,2]);\
 </script>\
-\
 </body>\
 </html>\
 }
